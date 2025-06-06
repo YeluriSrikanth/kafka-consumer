@@ -18,22 +18,21 @@ public class ConsumerController {
 //		System.out.println("Consumer ............." + message);
 //
 //	}
-	
-	
-	
-	@KafkaListener(topics = "upi-topic",groupId = "upi-group")
-	public void consumeMessages(String topic, String jsonString) {
-		User user = null;
-		try {
-			user = new ObjectMapper().readValue(jsonString, User.class);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Consumer ............." +jsonString );
 
-	}
-	
+
+    @KafkaListener(topics = "upi-topic", groupId = "upi-group")
+    public void consumeMessages(String topic, String jsonString) {
+        User user = null;
+        try {
+            user = new ObjectMapper().readValue(jsonString, User.class);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Consumer ............." + jsonString);
+
+    }
+
 
 //	@KafkaListener(topics = "producer_bucket", groupId = "consumer-group")
 //	@SendTo("response-topic")
@@ -42,14 +41,25 @@ public class ConsumerController {
 //		return "Consumed: " + message;
 //	}
 
-	@KafkaListener(topics = "upi-topic", groupId = "upi-group")
-	@SendTo("transaction-topic")
-	public String doTransation(String msg) {
-			
-			System.out.println("consumer consume the user Object and do transaction and return Ackn ");
-		
-		return msg;
+    @KafkaListener(topics = "upi-topic", groupId = "upi-group")
+    @SendTo("transaction-topic")
+    public String doTransation(String msg) {
 
-	}
+        System.out.println("consumer consume the user Object and do transaction and return Ackn ");
+
+        return msg;
+
+    }
+
+    @KafkaListener(topics = "name-topic", groupId = "name-group")
+    @SendTo("name-response")
+    public String registerUser(String msg) {
+
+        System.out.println("consumer consume the String Object " + msg);
+
+        return "Successful Registered User " + msg;
+
+    }
+
 
 }
